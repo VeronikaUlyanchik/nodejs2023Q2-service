@@ -7,6 +7,13 @@ interface User {
     updatedAt: number; // timestamp of last update
   }
 
+  interface Artist {
+    id: string; // uuid v4
+    name: string;
+    grammy: boolean;
+  }
+
   export type localDBType = {
-    users: User[]
+    users: User[],
+    artists: Artist[],
   }
