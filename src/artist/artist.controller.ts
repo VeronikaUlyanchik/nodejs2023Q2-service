@@ -2,7 +2,6 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe, NotFo
 import { ArtistService } from './artist.service';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
-import { UpdateUserDto } from 'src/user/dto/update-user.dto';
 
 @Controller('artist')
 export class ArtistController {
@@ -19,11 +18,11 @@ export class ArtistController {
   }
   @Get(':id')
   findOne(@Param('id', new ParseUUIDPipe()) id: string) {
-    const user = this.artistService.findOne(id);
-    if(!user) {
+    const artist = this.artistService.findOne(id);
+    if(!artist) {
       throw new NotFoundException();
     }
-    return this.artistService.findOne(id);
+    return artist;
   }
 
   @Put(':id')

@@ -7,22 +7,27 @@ import { DatabaseService } from 'src/database/database.service';
 export class TrackService {
   constructor(private readonly databaseService: DatabaseService) {}
   create(createTrackDto: CreateTrackDto) {
-    return 'This action adds a new track';
+    return this.databaseService.createTrack({
+      name: createTrackDto.name,
+      artistId: createTrackDto.artistId,
+      albumId: createTrackDto.albumId,
+      duration: createTrackDto.duration,
+    });
   }
 
   findAll() {
-    return `This action returns all track`;
+    return this.databaseService.listTracks();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} track`;
+  findOne(id: string) {
+    return this.databaseService.getTrack(id);
   }
 
-  update(id: number, updateTrackDto: UpdateTrackDto) {
-    return `This action updates a #${id} track`;
+  update(id: string, updateTrackDto: UpdateTrackDto) {
+    return this.databaseService.updateTrack(id, updateTrackDto);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} track`;
+  remove(id: string) {
+    return this.databaseService.deleteTrack(id);
   }
 }
