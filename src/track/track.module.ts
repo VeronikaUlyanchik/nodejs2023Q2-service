@@ -6,6 +6,6 @@ import { DatabaseService } from 'src/database/database.service';
 @Module({
   imports: [DatabaseService],
   controllers: [TrackController],
-  providers: [TrackService, DatabaseService]
+  providers: [TrackService, DatabaseService],
 })
 export class TrackModule {}

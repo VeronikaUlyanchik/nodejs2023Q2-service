@@ -10,7 +10,7 @@ export class UserService {
     const user = this.databaseService.createUser({
       login: createUserDto.login,
       password: createUserDto.password,
-    })
+    });
     return user;
   }
 
@@ -25,7 +25,11 @@ export class UserService {
   }
 
   update(id: string, updateUserDto: UpdateUserDto) {
-    const user = this.databaseService.updateUser(id, updateUserDto.oldPassword, updateUserDto.newPassword);
+    const user = this.databaseService.updateUser(
+      id,
+      updateUserDto.oldPassword,
+      updateUserDto.newPassword,
+    );
     return user;
   }
 

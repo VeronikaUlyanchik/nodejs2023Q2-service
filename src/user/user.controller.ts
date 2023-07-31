@@ -1,4 +1,17 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe, NotFoundException, Put, ForbiddenException, HttpCode } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  ParseUUIDPipe,
+  NotFoundException,
+  Put,
+  ForbiddenException,
+  HttpCode,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -20,18 +33,21 @@ export class UserController {
   @Get(':id')
   findOne(@Param('id', new ParseUUIDPipe()) id: string) {
     const user = this.userService.findOne(id);
-    if(!user) {
+    if (!user) {
       throw new NotFoundException();
     }
     return this.userService.findOne(id);
   }
 
   @Put(':id')
-  update(@Param('id', new ParseUUIDPipe()) id: string, @Body() updateUserDto: UpdateUserDto) {
+  update(
+    @Param('id', new ParseUUIDPipe()) id: string,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
     const user = this.findOne(id);
 
     const updated = this.userService.update(id, updateUserDto);
-    if(!updated) {
+    if (!updated) {
       throw new ForbiddenException();
     }
 

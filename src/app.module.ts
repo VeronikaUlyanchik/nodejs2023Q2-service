@@ -20,9 +20,31 @@ import { FavsController } from './favs/favs.controller';
 import { FavsService } from './favs/favs.service';
 
 @Module({
-  imports: [UserModule, DatabaseModule, TrackModule, ArtistModule, AlbumModule, FavsModule],
-  controllers: [AppController, UserController, TrackController, ArtistController, AlbumController, FavsController],
-  providers: [AppService, DatabaseService, UserService, TrackService, ArtistService, AlbumService, FavsService],
-  exports: [DatabaseModule]
+  imports: [
+    UserModule,
+    DatabaseModule,
+    TrackModule,
+    ArtistModule,
+    AlbumModule,
+    FavsModule,
+  ],
+  controllers: [
+    AppController,
+    UserController,
+    TrackController,
+    ArtistController,
+    AlbumController,
+    FavsController,
+  ],
+  providers: [
+    AppService,
+    DatabaseService,
+    UserService,
+    TrackService,
+    ArtistService,
+    AlbumService,
+    FavsService,
+  ],
+  exports: [DatabaseModule],
 })
 export class AppModule {}

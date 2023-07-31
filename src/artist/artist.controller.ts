@@ -1,4 +1,17 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe, NotFoundException, Put, ForbiddenException, HttpCode } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  ParseUUIDPipe,
+  NotFoundException,
+  Put,
+  ForbiddenException,
+  HttpCode,
+} from '@nestjs/common';
 import { ArtistService } from './artist.service';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
@@ -19,14 +32,17 @@ export class ArtistController {
   @Get(':id')
   findOne(@Param('id', new ParseUUIDPipe()) id: string) {
     const artist = this.artistService.findOne(id);
-    if(!artist) {
+    if (!artist) {
       throw new NotFoundException();
     }
     return artist;
   }
 
   @Put(':id')
-  update(@Param('id', new ParseUUIDPipe()) id: string, @Body() updateArtistDto: UpdateArtistDto) {
+  update(
+    @Param('id', new ParseUUIDPipe()) id: string,
+    @Body() updateArtistDto: UpdateArtistDto,
+  ) {
     const artist = this.findOne(id);
     const updated = this.artistService.update(id, updateArtistDto);
     return updated;

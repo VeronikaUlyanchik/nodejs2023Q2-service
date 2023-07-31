@@ -10,7 +10,7 @@ export class ArtistService {
     const artist = this.databaseService.createArtist({
       name: createArtistDto.name,
       grammy: createArtistDto.grammy,
-    })
+    });
     return artist;
   }
 
@@ -23,7 +23,11 @@ export class ArtistService {
   }
 
   update(id: string, updateArtistDto: UpdateArtistDto) {
-    return this.databaseService.updateArtist(id, updateArtistDto.name, updateArtistDto.grammy);
+    return this.databaseService.updateArtist(
+      id,
+      updateArtistDto.name,
+      updateArtistDto.grammy,
+    );
   }
 
   remove(id: string) {
