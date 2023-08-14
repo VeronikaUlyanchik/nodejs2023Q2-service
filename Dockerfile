@@ -3,7 +3,7 @@ WORKDIR /src
 COPY ["./package*.json", "./.eslintrc.js", "./tsconfig.json", "/src/"]
 RUN npm install
 
-COPY . /src
+COPY . .
 
 EXPOSE 4000
 

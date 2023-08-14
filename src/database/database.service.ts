@@ -1,13 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { localDBType } from './database.types';
-import { User } from 'src/user/entities/user.entity';
 import { v4 as uuidv4 } from 'uuid';
-import { deletePasswordResponse } from './utils';
-import { Artist } from 'src/artist/entities/artist.entity';
 import { Track } from 'src/track/entities/track.entity';
 import { Album } from 'src/album/entities/album.entity';
 import { Service } from 'src/favs/favs.controller';
-import { read } from 'fs';
+import { PrismaService } from './prisma.service';
+import { Artist, User } from '@prisma/client';
 
 const localDB: localDBType = {
   users: [],
@@ -23,67 +21,112 @@ const localDB: localDBType = {
 
 @Injectable()
 export class DatabaseService {
+  constructor(private prisma: PrismaService) {}
   //user
-  listUsers(): User[] {
-    return localDB.users.map((u) => {
-      return deletePasswordResponse(u);
-    });
+  async listUsers(): Promise<Omit<User, "password">[]> {
+    // return localDB.users.map((u) => {
+    //   return deletePasswordResponse(u);
+    // });
+    return await this.prisma.user.findMany({
+      select: {
+        login: true,
+        version: true, 
+        createdAt:  true, 
+        updatedAt:  true, 
+        id: true
+      }
+    })
   }
 
-  createUser(body: {
+  async createUser(body: {
     login: string;
     password: string;
-  }): Omit<User, 'password'> {
-    const user = {
-      id: uuidv4(),
-      login: body.login,
-      version: 1,
-      createdAt: new Date().getTime(),
-      updatedAt: new Date().getTime(),
-    };
-    localDB.users.push({ ...user, password: body.password });
-    return user;
-  }
-  getUser(id: string): Omit<User, 'password'> {
-    const user = localDB.users.find((u) => u.id === id);
-    if (!user) {
-      return null;
-    }
+  }): Promise<Omit<User, 'password'>> {
+    // const user = {
+    //   id: uuidv4(),
+    //   login: body.login,
+    //   version: 1,
+    //   createdAt: new Date().getTime(),
+    //   updatedAt: new Date().getTime(),
+    // };
+    // localDB.users.push({ ...user, password: body.password });
 
-    return deletePasswordResponse(user);
+    return await this.prisma.user.create({
+      data: {
+        id: uuidv4(),
+        login: body.login,
+        version: 1,
+        password: body.password 
+      }, 
+      select: {
+        login: true,
+        version: true, 
+        createdAt:  true, 
+        updatedAt:  true, 
+        id: true
+      }
+    });
+  }
+  async getUser(id: string): Promise<Omit<User, 'password'>> {
+    return await this.prisma.user.findFirst({
+      where: {
+        id: id,
+      },
+      select: {
+        login: true,
+        version: true, 
+        createdAt:  true, 
+        updatedAt:  true, 
+        id: true
+      }
+    })
   }
 
-  updateUser(
+  async updateUser(
     id: string,
     oldPassword: string,
     newPassword: string,
-  ): Omit<User, 'password'> {
-    const user = localDB.users.find(
-      (u) => u.id === id && u.password === oldPassword,
-    );
-    if (!user) {
+  ): Promise<Omit<User, 'password'>> {
+    const user = await this.prisma.user.findFirst({
+      where: {
+        id: id,
+      }
+    });
+
+    if (!user || user?.password !== oldPassword) {
       return null;
     }
-    const newUser = {
-      ...user,
-      version: user.version + 1,
-      updatedAt: new Date().getTime(),
-      password: newPassword,
-    };
-
-    localDB.users = localDB.users.map((u) => (u.id === id ? newUser : u));
-
-    return deletePasswordResponse(newUser);
+    
+    return await this.prisma.user.update({
+      where: {
+        id: id,
+      },
+      data: {
+        version: {increment: 1},
+        password: newPassword,
+      },
+      select: {
+        login: true,
+        version: true, 
+        createdAt:  true, 
+        updatedAt:  true, 
+        id: true
+      }
+    })
   }
 
-  removeUser(id: string): any {
-    localDB.users = localDB.users.filter((u) => u.id !== id);
+  async removeUser(id: string): Promise<any> {
+    await this.prisma.user.delete({
+      where: {
+        id,
+      }
+    })
     return [];
   }
 
   //artist
-  listArtists(): Artist[] {
-    return localDB.artists;
+  async listArtists(): Promise<Artist[]> {
+    return await this.prisma.artist.findMany({});
   }
 
   listArtistsById(ids: string[]): Artist[] {
@@ -96,14 +139,18 @@ export class DatabaseService {
       .filter(Boolean);
   }
 
-  createArtist(body: { name: string; grammy: boolean }): Artist {
+  async createArtist(body: { name: string; grammy: boolean }): Promise<{ id: string; name: string; grammy: boolean; }> {
     const artist = {
       id: uuidv4(),
       name: body.name,
       grammy: body.grammy,
     };
-    localDB.artists.push(artist);
-    return artist;
+
+    return await this.prisma.artist.create({
+      data: {
+        ...artist,
+      }
+    })
   }
 
   getArtist(id: string): Artist {
