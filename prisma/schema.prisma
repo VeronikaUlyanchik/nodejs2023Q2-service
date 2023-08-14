@@ -12,7 +12,7 @@ datasource db {
 
 model User {
   id       String  @id @default(uuid())
-  login    String  @unique
+  login    String  
   password String 
   version    Int
   createdAt  DateTime  @default(now()) 
@@ -32,10 +32,10 @@ model Track {
   id       String  @id @default(uuid())
   name     String
   duration Int
-  albumId   String
-  album      Album  @relation(fields: [albumId], references: [id], onDelete: Cascade , onUpdate: Cascade)
-  artistId  String
-  artist    Artist  @relation(fields: [artistId], references: [id], onDelete: Cascade , onUpdate: Cascade)
+  albumId   String?
+  album      Album?  @relation(fields: [albumId], references: [id], onDelete: SetNull , onUpdate: Cascade)
+  artistId  String?
+  artist    Artist?  @relation(fields: [artistId], references: [id], onDelete: SetNull , onUpdate: Cascade)
   fav       Fav[]
 } 
 
@@ -43,15 +43,18 @@ model Album {
   id       String  @id @default(uuid())
   name     String
   year     Int
-  artistId  String
-  artist    Artist  @relation(fields: [artistId], references: [id], onDelete: Cascade , onUpdate: Cascade)
+  artistId  String?
+  artist    Artist?  @relation(fields: [artistId], references: [id], onDelete: SetNull , onUpdate: Cascade)
   track     Track[]
   fav       Fav[]
 } 
 
 model Fav {
   id       String  @id @default(uuid())
-  tracks   Track[]
-  albums    Album[]
-  artists   Artist[] 
+  trackId String? @unique
+  track   Track? @relation(fields: [trackId], references: [id], onDelete: SetNull , onUpdate: Cascade)
+  albumId String? @unique
+  album   Album? @relation(fields: [albumId], references: [id], onDelete: SetNull , onUpdate: Cascade)
+  artistId String? @unique
+  artist   Artist? @relation(fields: [artistId], references: [id], onDelete: SetNull , onUpdate: Cascade)
 } 

@@ -6,26 +6,26 @@ import { DatabaseService } from 'src/database/database.service';
 @Injectable()
 export class UserService {
   constructor(private readonly databaseService: DatabaseService) {}
-  create(createUserDto: CreateUserDto) {
-    const user = this.databaseService.createUser({
+  async create(createUserDto: CreateUserDto) {
+    const user = await this.databaseService.createUser({
       login: createUserDto.login,
       password: createUserDto.password,
     });
     return user;
   }
 
-  findAll() {
-    const users = this.databaseService.listUsers();
+  async findAll() {
+    const users = await this.databaseService.listUsers();
     return users;
   }
 
-  findOne(id: string) {
-    const user = this.databaseService.getUser(id);
+  async findOne(id: string) {
+    const user = await this.databaseService.getUser(id);
     return user;
   }
 
-  update(id: string, updateUserDto: UpdateUserDto) {
-    const user = this.databaseService.updateUser(
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    const user = await this.databaseService.updateUser(
       id,
       updateUserDto.oldPassword,
       updateUserDto.newPassword,
@@ -33,8 +33,9 @@ export class UserService {
     return user;
   }
 
-  remove(id: string) {
-    const user = this.databaseService.removeUser(id);
+  async remove(id: string) {
+
+    const user = await this.databaseService.removeUser(id);
     return user;
   }
 }
