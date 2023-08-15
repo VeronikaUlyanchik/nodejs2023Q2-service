@@ -6,8 +6,8 @@ import { DatabaseService } from 'src/database/database.service';
 @Injectable()
 export class TrackService {
   constructor(private readonly databaseService: DatabaseService) {}
-  create(createTrackDto: CreateTrackDto) {
-    return this.databaseService.createTrack({
+  async create(createTrackDto: CreateTrackDto) {
+    return await this.databaseService.createTrack({
       name: createTrackDto.name,
       artistId: createTrackDto.artistId,
       albumId: createTrackDto.albumId,
@@ -15,19 +15,19 @@ export class TrackService {
     });
   }
 
-  findAll() {
-    return this.databaseService.listTracks();
+  async findAll() {
+    return await this.databaseService.listTracks();
   }
 
-  findOne(id: string) {
-    return this.databaseService.getTrack(id);
+  async findOne(id: string) {
+    return await this.databaseService.getTrack(id);
   }
 
-  update(id: string, updateTrackDto: UpdateTrackDto) {
-    return this.databaseService.updateTrack(id, updateTrackDto);
+  async update(id: string, updateTrackDto: UpdateTrackDto) {
+    return await this.databaseService.updateTrack(id, updateTrackDto);
   }
 
-  remove(id: string) {
-    return this.databaseService.deleteTrack(id);
+  async remove(id: string) {
+    return await this.databaseService.deleteTrack(id);
   }
 }
