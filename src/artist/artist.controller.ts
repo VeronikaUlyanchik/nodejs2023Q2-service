@@ -9,7 +9,6 @@ import {
   ParseUUIDPipe,
   NotFoundException,
   Put,
-  ForbiddenException,
   HttpCode,
 } from '@nestjs/common';
 import { ArtistService } from './artist.service';

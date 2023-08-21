@@ -24,7 +24,6 @@ import { log } from 'console';
       if (isPublic) {
         return true;
       }
-      console.log(isPublic)
       
       if (!token) {
         throw new UnauthorizedException();

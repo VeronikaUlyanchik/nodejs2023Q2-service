@@ -1,6 +1,7 @@
 import {
     Body,
     Controller,
+    Get,
     Global,
     HttpCode,
     HttpStatus,
@@ -29,5 +30,19 @@ import { SignUpDto } from './dto/singup.dto';
     @SetMetadata('isPublic', true)
     signUp(@Body() signUpDto: SignUpDto) {
       return this.authService.signUp(signUpDto.login, signUpDto.password);
+    }
+
+    @HttpCode(HttpStatus.OK)
+    @Get('doc')
+    @SetMetadata('isPublic', true)
+    get() {
+      return [];
+    }
+
+    @HttpCode(HttpStatus.OK)
+    @Get('')
+    @SetMetadata('isPublic', true)
+    getSom() {
+      return [];
     }
   }
