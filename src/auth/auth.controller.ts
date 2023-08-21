@@ -12,6 +12,7 @@ import {
   import { AuthService } from './auth.service';
 import { AuthGuard } from './auth.guard';
 import { SignUpDto } from './dto/singup.dto';
+import { SignInDto } from './dto/singip.dto';
 
   @Global()
   @Controller('auth')
@@ -21,8 +22,8 @@ import { SignUpDto } from './dto/singup.dto';
     @HttpCode(HttpStatus.OK)
     @Post('login')
     @SetMetadata('isPublic', true)
-    signIn(@Body() signInDto: Record<string, any>) {
-      return this.authService.signIn(signInDto.username, signInDto.password);
+    signIn(@Body() signInDto: SignInDto) {
+      return this.authService.signIn(signInDto.login, signInDto.password);
     }
 
     @HttpCode(HttpStatus.CREATED)
