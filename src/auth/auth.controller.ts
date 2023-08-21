@@ -5,8 +5,11 @@ import {
     HttpCode,
     HttpStatus,
     Post,
+    UseGuards,
   } from '@nestjs/common';
   import { AuthService } from './auth.service';
+import { AuthGuard } from './auth.guard';
+import { SignUpDto } from './dto/singup.dto';
 
   @Global()
   @Controller('auth')
@@ -15,13 +18,14 @@ import {
   
     @HttpCode(HttpStatus.OK)
     @Post('login')
+    @UseGuards(AuthGuard)
     signIn(@Body() signInDto: Record<string, any>) {
       return this.authService.signIn(signInDto.username, signInDto.password);
     }
 
     @HttpCode(HttpStatus.CREATED)
     @Post('signup')
-    signUp(@Body() signUpDto: Record<string, any>) {
-      return this.authService.signUp(signUpDto.username, signUpDto.password);
+    signUp(@Body() signUpDto: SignUpDto) {
+      return this.authService.signUp(signUpDto.login, signUpDto.password);
     }
   }

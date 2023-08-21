@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { DatabaseService } from 'src/database/database.service';
+import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class UserService {
@@ -37,5 +38,16 @@ export class UserService {
 
     const user = await this.databaseService.removeUser(id);
     return user;
+  }
+
+  async compareHash(hash: string, password: string) {
+    return await bcrypt.compare(password, hash);
+  }
+
+  async hash(rawPassword: string) {
+    const password = await bcrypt.hash(
+      rawPassword,
+      parseInt(process.env.CRYPT_SALT || '10'));
+    return password;
   }
 }
