@@ -18,6 +18,12 @@ import { AlbumService } from './album/album.service';
 import { FavsModule } from './favs/favs.module';
 import { FavsController } from './favs/favs.controller';
 import { FavsService } from './favs/favs.service';
+import { AuthService } from './auth/auth.service';
+import { JwtModule, JwtService } from '@nestjs/jwt';
+import { AuthController } from './auth/auth.controller';
+import { AuthModule } from './auth/auth.module';
+import { AuthGuard } from './auth/auth.guard';
+import { APP_GUARD } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -27,6 +33,8 @@ import { FavsService } from './favs/favs.service';
     ArtistModule,
     AlbumModule,
     FavsModule,
+    JwtModule,
+    AuthModule,
   ],
   controllers: [
     AppController,
@@ -35,6 +43,7 @@ import { FavsService } from './favs/favs.service';
     ArtistController,
     AlbumController,
     FavsController,
+    AuthController,
   ],
   providers: [
     AppService,
@@ -44,7 +53,13 @@ import { FavsService } from './favs/favs.service';
     ArtistService,
     AlbumService,
     FavsService,
+    AuthService,
+    JwtService,
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
   ],
-  exports: [DatabaseModule],
+  exports: [DatabaseModule, AuthModule],
 })
 export class AppModule {}
