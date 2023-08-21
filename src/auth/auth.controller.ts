@@ -5,6 +5,7 @@ import {
     HttpCode,
     HttpStatus,
     Post,
+    SetMetadata,
     UseGuards,
   } from '@nestjs/common';
   import { AuthService } from './auth.service';
@@ -18,13 +19,14 @@ import { SignUpDto } from './dto/singup.dto';
   
     @HttpCode(HttpStatus.OK)
     @Post('login')
-    @UseGuards(AuthGuard)
+    @SetMetadata('isPublic', true)
     signIn(@Body() signInDto: Record<string, any>) {
       return this.authService.signIn(signInDto.username, signInDto.password);
     }
 
     @HttpCode(HttpStatus.CREATED)
     @Post('signup')
+    @SetMetadata('isPublic', true)
     signUp(@Body() signUpDto: SignUpDto) {
       return this.authService.signUp(signUpDto.login, signUpDto.password);
     }

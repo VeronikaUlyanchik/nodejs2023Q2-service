@@ -7,9 +7,6 @@ import { AuthController } from './auth.controller';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
-console.log('JWT_SECRET_KEY:', process.env.JWT_SECRET_KEY);
-console.log('TOKEN_EXPIRE_TIME:', process.env.TOKEN_EXPIRE_TIME);
-
 @Module({
   imports: [
     UserModule,

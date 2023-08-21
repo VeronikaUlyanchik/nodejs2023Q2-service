@@ -10,7 +10,7 @@ export class UserService {
   async create(createUserDto: CreateUserDto) {
     const user = await this.databaseService.createUser({
       login: createUserDto.login,
-      password: createUserDto.password,
+      password: await this.hash(createUserDto.password),
     });
     return user;
   }
@@ -25,6 +25,12 @@ export class UserService {
     return user;
   }
 
+  async findOneByLogin(login: string, password: string) {
+    const user = await this.databaseService.getUserByLogin(login);
+    const isValid = this.compareHash(user.password, password);
+    return isValid ? user : null;
+  }
+
   async update(id: string, updateUserDto: UpdateUserDto) {
     const user = await this.databaseService.updateUser(
       id,
@@ -35,7 +41,6 @@ export class UserService {
   }
 
   async remove(id: string) {
-
     const user = await this.databaseService.removeUser(id);
     return user;
   }
@@ -44,9 +49,9 @@ export class UserService {
     return await bcrypt.compare(password, hash);
   }
 
-  async hash(rawPassword: string) {
+  async hash(pass: string) {
     const password = await bcrypt.hash(
-      rawPassword,
+      pass,
       parseInt(process.env.CRYPT_SALT || '10'));
     return password;
   }

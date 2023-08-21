@@ -75,6 +75,24 @@ export class DatabaseService extends PrismaService {
     return user ? {...user, createdAt: user.createdAt.getTime(), updatedAt: user.updatedAt.getTime()} : null
   }
 
+  async getUserByLogin(login: string): Promise<any> {
+    const user =  await this.prisma.user.findFirst({
+      where: {
+        login: login,
+      },
+      select: {
+        login: true,
+        version: true, 
+        createdAt:  true, 
+        updatedAt:  true, 
+        id: true,
+        password: true,
+      }
+    })
+
+    return user ? {...user, createdAt: user.createdAt.getTime(), updatedAt: user.updatedAt.getTime()} : null
+  }
+
   async updateUser(
     id: string,
     oldPassword: string,

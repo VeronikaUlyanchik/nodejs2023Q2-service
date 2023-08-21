@@ -57,10 +57,10 @@ import { ConfigModule } from '@nestjs/config';
     FavsService,
     AuthService,
     JwtService,
-    // {
-    //   provide: APP_GUARD,
-    //   useClass: AuthGuard,
-    // },
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
   ],
   exports: [DatabaseModule, AuthModule],
 })
