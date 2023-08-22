@@ -26,11 +26,11 @@ export class FavsController {
   constructor(private readonly favsService: FavsService) {}
 
   @Post('/:service/:id')
-  create(
+  async create(
     @Param('id', new ParseUUIDPipe()) id: string,
     @Param('service', new ParseEnumPipe(Service)) service: Service,
   ) {
-    const fav = this.favsService.create(service, id);
+    const fav = await this.favsService.create(service, id);
     if (!fav) {
       throw new UnprocessableEntityException();
     }
@@ -38,17 +38,17 @@ export class FavsController {
   }
 
   @Get()
-  findAll() {
-    return this.favsService.findAll();
+  async findAll() {
+    return  await this.favsService.findAll();
   }
 
   @Delete('/:service/:id')
   @HttpCode(204)
-  remove(
+  async remove(
     @Param('id', new ParseUUIDPipe()) id: string,
     @Param('service', new ParseEnumPipe(Service)) service: Service,
   ) {
-    const fav = this.favsService.remove(service, id);
+    const fav =  await this.favsService.remove(service, id);
     if (!fav) {
       throw new UnprocessableEntityException();
     }

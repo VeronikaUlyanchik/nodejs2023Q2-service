@@ -1,0 +1,20 @@
+version: '3.6'
+networks: 
+   homelibnetwork: 
+     driver: bridge 
+services:
+  app:
+    build: ./
+    ports:
+      - 4000:4000
+    environment:
+        DATABASE_URL: 'postgresql://root:root@localhost:5432/mydb?schema=public'
+  postgres:
+    container_name: postgres
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_USER=root
+    ports:
+      - 5432:5432

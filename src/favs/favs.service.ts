@@ -7,15 +7,15 @@ import { Service } from './favs.controller';
 @Injectable()
 export class FavsService {
   constructor(private readonly databaseService: DatabaseService) {}
-  create(service: Service, id: string) {
-    return this.databaseService.addFav(service, id);
+  async create(service: Service, id: string) {
+    return await this.databaseService.addFav(service, id);
   }
 
-  findAll() {
-    return this.databaseService.listFavs();
+  async findAll() {
+    return await this.databaseService.listFavs();
   }
 
-  remove(service: Service, id: string) {
-    return this.databaseService.removeFav(service, id);
+  async remove(service: Service, id: string) {
+    return await this.databaseService.removeFav(service, id);
   }
 }

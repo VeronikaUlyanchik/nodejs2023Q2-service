@@ -6,31 +6,32 @@ import { DatabaseService } from 'src/database/database.service';
 @Injectable()
 export class ArtistService {
   constructor(private readonly databaseService: DatabaseService) {}
-  create(createArtistDto: CreateArtistDto) {
-    const artist = this.databaseService.createArtist({
+  async create(createArtistDto: CreateArtistDto) {
+    const artist =  await this.databaseService.createArtist({
       name: createArtistDto.name,
       grammy: createArtistDto.grammy,
     });
     return artist;
   }
 
-  findAll() {
-    return this.databaseService.listArtists();
+  async findAll() {
+    return await this.databaseService.listArtists();
   }
 
-  findOne(id: string) {
-    return this.databaseService.getArtist(id);
+  async findOne(id: string) {
+    const res = await this.databaseService.getArtist(id);
+    return res;
   }
 
-  update(id: string, updateArtistDto: UpdateArtistDto) {
-    return this.databaseService.updateArtist(
+  async update(id: string, updateArtistDto: UpdateArtistDto) {
+    return await this.databaseService.updateArtist(
       id,
       updateArtistDto.name,
       updateArtistDto.grammy,
     );
   }
 
-  remove(id: string) {
-    return this.databaseService.deleteArtist(id);
+  async remove(id: string) {
+    return await this.databaseService.deleteArtist(id);
   }
 }

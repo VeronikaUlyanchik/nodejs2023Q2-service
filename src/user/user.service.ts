@@ -2,30 +2,37 @@ import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { DatabaseService } from 'src/database/database.service';
+import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class UserService {
   constructor(private readonly databaseService: DatabaseService) {}
-  create(createUserDto: CreateUserDto) {
-    const user = this.databaseService.createUser({
+  async create(createUserDto: CreateUserDto) {
+    const user = await this.databaseService.createUser({
       login: createUserDto.login,
-      password: createUserDto.password,
+      password: await this.hash(createUserDto.password),
     });
     return user;
   }
 
-  findAll() {
-    const users = this.databaseService.listUsers();
+  async findAll() {
+    const users = await this.databaseService.listUsers();
     return users;
   }
 
-  findOne(id: string) {
-    const user = this.databaseService.getUser(id);
+  async findOne(id: string) {
+    const user = await this.databaseService.getUser(id);
     return user;
   }
 
-  update(id: string, updateUserDto: UpdateUserDto) {
-    const user = this.databaseService.updateUser(
+  async findOneByLogin(login: string, password: string) {
+    const user = await this.databaseService.getUserByLogin(login);
+    const isValid = this.compareHash(user.password, password);
+    return isValid ? user : null;
+  }
+
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    const user = await this.databaseService.updateUser(
       id,
       updateUserDto.oldPassword,
       updateUserDto.newPassword,
@@ -33,8 +40,19 @@ export class UserService {
     return user;
   }
 
-  remove(id: string) {
-    const user = this.databaseService.removeUser(id);
+  async remove(id: string) {
+    const user = await this.databaseService.removeUser(id);
     return user;
+  }
+
+  async compareHash(hash: string, password: string) {
+    return await bcrypt.compare(password, hash);
+  }
+
+  async hash(pass: string) {
+    const password = await bcrypt.hash(
+      pass,
+      parseInt(process.env.CRYPT_SALT || '10'));
+    return password;
   }
 }

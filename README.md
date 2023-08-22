@@ -70,3 +70,9 @@ npm run format
 Press <kbd>F5</kbd> to debug.
 
 For more information, visit: https://code.visualstudio.com/docs/editor/debugging
+
+### Open with docker 
+
+1 - start container to run postgress /  docker-compose up
+2 - prisma migrate dev 
+3 - npm start / npm start:dev

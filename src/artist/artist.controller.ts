@@ -9,7 +9,6 @@ import {
   ParseUUIDPipe,
   NotFoundException,
   Put,
-  ForbiddenException,
   HttpCode,
 } from '@nestjs/common';
 import { ArtistService } from './artist.service';
@@ -21,17 +20,17 @@ export class ArtistController {
   constructor(private readonly artistService: ArtistService) {}
 
   @Post()
-  create(@Body() createArtistDto: CreateArtistDto) {
-    return this.artistService.create(createArtistDto);
+  async create(@Body() createArtistDto: CreateArtistDto) {
+    return await this.artistService.create(createArtistDto);
   }
 
   @Get()
-  findAll() {
-    return this.artistService.findAll();
+  async findAll() {
+    return await this.artistService.findAll();
   }
   @Get(':id')
-  findOne(@Param('id', new ParseUUIDPipe()) id: string) {
-    const artist = this.artistService.findOne(id);
+  async findOne(@Param('id', new ParseUUIDPipe()) id: string) {
+    const artist = await this.artistService.findOne(id);
     if (!artist) {
       throw new NotFoundException();
     }
@@ -39,19 +38,19 @@ export class ArtistController {
   }
 
   @Put(':id')
-  update(
+  async update(
     @Param('id', new ParseUUIDPipe()) id: string,
     @Body() updateArtistDto: UpdateArtistDto,
   ) {
-    const artist = this.findOne(id);
-    const updated = this.artistService.update(id, updateArtistDto);
+    const artist = await  this.findOne(id);
+    const updated = await this.artistService.update(id, updateArtistDto);
     return updated;
   }
 
   @Delete(':id')
   @HttpCode(204)
-  remove(@Param('id', new ParseUUIDPipe()) id: string) {
-    const artist = this.findOne(id);
-    return this.artistService.remove(id);
+  async remove(@Param('id', new ParseUUIDPipe()) id: string) {
+    const artist = await this.findOne(id);
+    return await this.artistService.remove(id);
   }
 }
